@@ -1790,6 +1790,10 @@ methods::
 
     b.entry_set(manager="entries").is_published()
 
+:meth:`~django.db.models.query.QuerySet.prefetch_related` will always use the
+default manager. Therefore using a custom manager with prefetch_related will
+not give the expected results.
+
 Additional methods to handle related objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
