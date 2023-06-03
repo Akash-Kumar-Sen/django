@@ -1790,10 +1790,12 @@ methods::
 
     b.entry_set(manager="entries").is_published()
 
-:meth:`~django.db.models.query.QuerySet.prefetch_related` method always
-uses the default manager. Therefore using a custom manager with the
-:meth:`~django.db.models.query.QuerySet.prefetch_related` method
-will not produce expected results.
+.. admonition:: Interaction with prefetching
+
+   When invoking :meth:`~django.db.models.query.QuerySet.prefetch_related`, the
+   default manager will be used. Therefore, using a custom manager in
+   conjunction with :meth:`~django.db.models.query.QuerySet.prefetch_related`
+   may not produce the expected results.
 
 Additional methods to handle related objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
