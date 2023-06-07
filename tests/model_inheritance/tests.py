@@ -157,8 +157,6 @@ class ModelInheritanceTests(TestCase):
                 address="1234 W. Ash",
             )
 
-        itrmp.refresh_from_db()
-
         italian_resturant_place = itrmp.italianrestaurant_ptr.place_ptr
         itrmp_place = itrmp.place_ptr
         italian_resturant_resturant = itrmp.italianrestaurant_ptr.restaurant_ptr

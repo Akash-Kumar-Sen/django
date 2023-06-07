@@ -923,8 +923,13 @@ class Model(AltersData, metaclass=ModelBase):
             )
             if not updated:
                 inserted = True
+
+            if not hasattr(field, "attname"):
+                setattr(field, "model", self.__class__)
+                setattr(field, "attname", field.get_attname())
+
             # Set the parent's PK value to self.
-            if field and hasattr(field, "attname"):
+            if field:
                 setattr(self, field.attname, self._get_pk_val(parent._meta))
                 # Since we didn't have an instance of the parent handy set
                 # attname directly, bypassing the descriptor. Invalidate
