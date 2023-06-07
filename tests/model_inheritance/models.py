@@ -186,3 +186,7 @@ class Child(Parent):
 
 class GrandChild(Child):
     pass
+
+
+class ItalianRestaurantManyParents(ItalianRestaurant, Place):
+    pass
