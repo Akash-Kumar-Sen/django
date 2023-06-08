@@ -151,7 +151,7 @@ class ModelInheritanceTests(TestCase):
         self.assertSequenceEqual(s.titles.all(), [])
 
     def test_create_diamond_mti_common_parents(self):
-        with self.assertNumQueries(5):
+        with self.assertNumQueries(4):
             itrmp = ItalianRestaurantManyParents.objects.create(
                 name="Ristorante Miron",
                 address="1234 W. Ash",

@@ -904,8 +904,16 @@ class Model(AltersData, metaclass=ModelBase):
         """Save all the parents of cls using values from self."""
         meta = cls._meta
         inserted = False
-        for parent, field in meta.parents.items():
-            # Make sure the link fields are synced between parent and self.
+        parents = list(meta.parents.keys())
+        for parent in parents:
+            if any(
+                issubclass(other_parent, parent)
+                for other_parent in parents
+                if not other_parent == parent
+            ):
+                parents.remove(parent)
+        for parent in parents:
+            field = meta.parents.get(parent, None)
             if (
                 field
                 and getattr(self, parent._meta.pk.attname) is None
@@ -923,10 +931,6 @@ class Model(AltersData, metaclass=ModelBase):
             )
             if not updated:
                 inserted = True
-
-            if not hasattr(field, "attname"):
-                setattr(field, "model", self.__class__)
-                setattr(field, "attname", field.get_attname())
 
             # Set the parent's PK value to self.
             if field:
