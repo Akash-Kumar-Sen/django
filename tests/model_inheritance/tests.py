@@ -14,6 +14,7 @@ from .models import (
     GrandChild,
     GrandParent,
     ItalianRestaurant,
+    ItalianRestaurantManyParents,
     MixinModel,
     Parent,
     ParkingLot,
@@ -148,6 +149,25 @@ class ModelInheritanceTests(TestCase):
         # Higher level test for correct query values (title foof not
         # accidentally found).
         self.assertSequenceEqual(s.titles.all(), [])
+
+    def test_create_diamond_mti_common_parents(self):
+        with self.assertNumQueries(4):
+            itrmp = ItalianRestaurantManyParents.objects.create(
+                name="Ristorante Miron",
+                address="1234 W. Ash",
+            )
+
+        italian_resturant_place = itrmp.italianrestaurant_ptr.place_ptr
+        itrmp_place = itrmp.place_ptr
+        italian_resturant_resturant = itrmp.italianrestaurant_ptr.restaurant_ptr
+        itrmp_resturant = itrmp.restaurant_ptr
+
+        # Some draft tests to test regression
+        self.assertEqual(italian_resturant_place, itrmp_place)
+        self.assertEqual(italian_resturant_resturant, itrmp_resturant)
+        self.assertEqual(itrmp_resturant.place_ptr, itrmp_place)
+        self.assertEqual(itrmp.name, "Ristorante Miron")
+        self.assertEqual(itrmp.address, "1234 W. Ash")
 
     def test_update_parent_filtering(self):
         """
