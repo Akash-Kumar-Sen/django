@@ -912,6 +912,10 @@ class QuerySet(AltersData):
                     when_statements.append(When(pk=obj.pk, then=attr))
                 case_statement = Case(*when_statements, output_field=field)
                 if requires_casting:
+                    if connection.ops.cast_char_field_without_max_length:
+                        connection.ops.cast_data_types[
+                            "CharField"
+                        ] = connection.ops.cast_char_field_without_max_length
                     case_statement = Cast(case_statement, output_field=field)
                 update_kwargs[field.attname] = case_statement
             updates.append(([obj.pk for obj in batch_objs], update_kwargs))
